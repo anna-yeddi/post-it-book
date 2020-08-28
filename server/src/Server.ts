@@ -20,13 +20,25 @@ const rootDir = Path.resolve(__dirname)
     // Using manual import
     '/manual': [NotesCtrl],
   },
+
   // Custom configuration to be added here:
   acceptMimes: ['application/json'],
-  // Default settings for override (if needed)
+
+  // Connection
   // Ports are referenced in nodemon config too
   port: '127.0.0.1:8080',
   httpsPort: '127.0.0.1:8000',
   debug: true,
+
+  // Database
+  mongoose: [
+    {
+      // All models without dbName will be assigned to this connection
+      id: 'default',
+      url: 'mongodb://127.0.0.1:27017/default',
+      connectionOptions: {},
+    },
+  ],
 })
 export class Server {
   @Inject()

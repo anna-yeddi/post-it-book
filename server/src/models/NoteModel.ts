@@ -5,6 +5,7 @@ import {
   Enum,
   Example,
   Format,
+  Ignore,
   Maximum,
   MaxLength,
   Minimum,
@@ -13,6 +14,7 @@ import {
   Required,
   Title,
 } from '@tsed/common'
+import { Indexed, Model, ObjectID, Unique } from '@tsed/mongoose'
 
 // TODO: Edit model in accordance to the DB data
 
@@ -21,7 +23,13 @@ enum Categories {
   CAT2 = 'cat2',
 }
 
+@Model()
 export class NoteModel {
+  @Ignore()
+  _something!: string
+
+  // rename _id by id (for response sent to the client)
+  @ObjectID('id')
   _id!: string
 
   // Annotations:
@@ -31,12 +39,11 @@ export class NoteModel {
   @Default('default')
   prop: string = 'default'
 
+  @Unique()
   @Required()
   unique!: string
 
-  @CollectionOf(Role)
-  roles: Role[]
-
+  @Indexed()
   @MinLength(3)
   @MaxLength(50)
   indexed!: string
@@ -56,6 +63,7 @@ export class NoteModel {
   @Email()
   email!: string
 
+  // Match field
   @Pattern(/[a-z]/)
   pattern!: String
 
