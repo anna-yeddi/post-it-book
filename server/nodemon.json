@@ -1,0 +1,15 @@
+{
+  "PORT": 8080,
+  "verbose": true,
+  "execMap": {
+    "ts": "ts-node"
+  },
+  "events": {
+    "restart": "osascript -e 'display notification \"App restarted due to:\n'$FILENAME'\" with title \"nodemon\"'"
+  },
+  "watch": ["src/**/*.ts"],
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "ext": "js,json"
+}
