@@ -1,30 +1,47 @@
 import { Configuration, Inject, PlatformApplication } from '@tsed/common'
 import { GlobalAcceptMimesMiddleware } from '@tsed/platform-express'
-import * as bodyParser from 'body-parser'
-import * as compress from 'compression'
-import * as cookieParser from 'cookie-parser'
-import * as methodOverride from 'method-override'
+import { NotesCtrl } from './controllers/NotesCtrl'
+import '@tsed/ajv'
+const Path = require('path')
+const bodyParser = require('body-parser')
+const compress = require('compression')
+const cookieParser = require('cookie-parser')
+const methodOverride = require('method-override')
 
-const rootDir = __dirname
+const rootDir = Path.resolve(__dirname)
 
 @Configuration({
   rootDir,
+  componentsScan: [`${rootDir}/middlewares/**/**.js`],
+  // Global endpoint for controllers
+  mount: {
+    // Using componentScan
+    '/rest': `./controllers/*.ts`,
+    // Using manual import
+    '/manual': [NotesCtrl],
+  },
+  // Custom configuration to be added here:
   acceptMimes: ['application/json'],
+  // Default settings for override (if needed)
+  // Ports are referenced in nodemon config too
+  port: '127.0.0.1:8080',
+  httpsPort: '127.0.0.1:8000',
+  debug: true,
 })
 export class Server {
   @Inject()
-  app: PlatformApplication
+  app!: PlatformApplication
 
   @Configuration()
-  settings: Configuration
+  settings!: Configuration
 
   /**
-   * This method let you configure the express middleware required by your application to works.
+   * This method lets to configure the express middleware required by the app.
    * @returns {Server}
    */
   public $beforeRoutesInit(): void | Promise<any> {
     this.app
-      .use(GlobalAcceptMimesMiddleware) // optional
+      .use(GlobalAcceptMimesMiddleware) // optional - for future middlewares to be added
       .use(cookieParser())
       .use(compress({}))
       .use(methodOverride())
