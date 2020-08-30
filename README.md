@@ -1,6 +1,6 @@
 # StickyBook
 
-Note-taking app
+Note-taking application
 
 ## Features
 
