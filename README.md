@@ -1,4 +1,4 @@
-# StickyBook
+# Post-It-Book
 
 Note-taking application
 

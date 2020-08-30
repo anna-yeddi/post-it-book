@@ -1,7 +1,8 @@
 import { Service } from '@tsed/common'
 import { MongooseService } from '@tsed/mongoose'
 
-// To retrieve instance of Mongoose.Connection
+// To retrieve instance of Mongoose.Connection,
+// if needed (TBD)
 
 @Service()
 export class NotesService {
