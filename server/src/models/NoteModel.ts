@@ -13,61 +13,87 @@ import {
   Pattern,
   Required,
   Title,
+  Property,
 } from '@tsed/common'
 import { Indexed, Model, ObjectID, Unique } from '@tsed/mongoose'
 
 // TODO: Edit model in accordance to the DB data
 
-enum Categories {
-  CAT1 = 'cat1',
-  CAT2 = 'cat2',
-}
-
+// enum Categories {
+//   CAT1 = 'cat1',
+//   CAT2 = 'cat2',
+// }
 @Model()
 export class NoteModel {
-  @Ignore()
-  _something!: string
+  // @Ignore()
+  // _something!: string
 
   // rename _id by id (for response sent to the client)
   @ObjectID('id')
   _id!: string
 
+  // TODO:
   // Annotations:
-  @Title('title')
-  @Example('example')
-  @Description('Description')
-  @Default('default')
-  prop: string = 'default'
+  // @Title('title')
+  // @Example('example')
+  // @Description('Description')
+  // @Default('default')
+  // prop: string = 'default'
 
   @Unique()
-  @Required()
-  unique!: string
-
   @Indexed()
-  @MinLength(3)
-  @MaxLength(50)
-  indexed!: string
+  @Required()
+  @Example('My New Note from Sun Aug 30 2020 18:11:59')
+  @Default(
+    'My New Note ' +
+      new Date().toDateString() +
+      new Date().toTimeString().split(' ')[0]
+  )
+  title: string =
+    'My New Note from ' +
+    new Date().toDateString() +
+    new Date().toTimeString().split(' ')[0]
 
-  @Minimum(0)
-  @Maximum(100)
-  @Default(0)
-  rate: Number = 0
+  @Required()
+  @Title('Note itself')
+  @Default('')
+  body: string = ''
 
-  @Enum(Categories)
-  // or @Enum("type1", "type2")
-  category!: Categories
+  @Title('Attachments (if any)')
+  @Example(['image.jpeg', 'url to YouTube video', 'book.pdf'])
+  @Default([])
+  attachments: Array<fil>
 
-  @Enum('red', 'amber', 'green', null, 42)
-  prop3!: string | number | null
+  @Description('Users that have access to this note')
+  @Default([])
+  sharedWith: Array<string> = []
 
-  @Email()
-  email!: string
+  @MinLength(0)
+  @MaxLength(255)
+  @Default('General')
+  category: string = 'General'
 
-  // Match field
-  @Pattern(/[a-z]/)
-  pattern!: String
+  @MinLength(0)
+  @MaxLength(255)
+  tag!: string
+  @Default([])
+  tags: Array<string> = []
+
+  @Description('If this note is added to favorites by the user')
+  @Default(false)
+  isFavorite: boolean = false
 
   @Format('date-time')
   @Default(Date.now)
-  dateCreation: Date = new Date()
+  dateCreated: Date = new Date()
+
+  @Format('date-time')
+  @Default(Date.now)
+  dateEdited: Date = new Date()
+
+  @Description(
+    'If this note was deleted by the user and is currently is stored in Trash'
+  )
+  @Default(false)
+  isRemoved: boolean = false
 }
