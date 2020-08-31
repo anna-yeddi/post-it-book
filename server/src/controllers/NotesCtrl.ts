@@ -1,10 +1,20 @@
-import { Controller, Get, PathParams, BodyParams, Post } from '@tsed/common'
+import {
+  BodyParams,
+  Controller,
+  Get,
+  PathParams,
+  Post,
+  Put,
+  Returns,
+} from '@tsed/common'
+import { MulterOptions, MultipartFile } from '@tsed/multipartfiles'
 import { NoteModel } from '../models/NoteModel'
-import { PayloadModel } from '../models/PayloadModel'
+// import { PayloadModel } from '../models/PayloadModel'
 
 @Controller('/notes')
 export class NotesCtrl {
   // TODO: return notes by name, user, other fields. *Also containing input text
+  // TODO: write Get for files
 
   // GET requests:
 
@@ -31,29 +41,50 @@ export class NotesCtrl {
   // POST requests:
 
   @Post()
-  updatePayload(@BodyParams() payload: PayloadModel): any {
-    console.log('payload', payload)
-
-    return payload
-  }
-
-  @Post()
-  updateNote(@BodyParams('note') note: NoteModel): any {
-    console.log('note', note)
+  createNote(@BodyParams('note') note: NoteModel): any {
+    console.log('Create note', note)
 
     return note
   }
 
-  @Post()
-  updatePayloads(@BodyParams(PayloadModel) payloads: PayloadModel[]): any {
-    console.log('payloads', payloads)
+  // @Post()
+  // createPayload(@BodyParams() payload: PayloadModel): any {
+  //   console.log('Create payload', payload)
 
-    return payloads
+  //   return payload
+  // }
+
+  @Post(':id/file')
+  // @Returns(201, { description: 'Created' })
+  @MulterOptions({ dest: '/users/:id/uploads' })
+  // @MulterOptions({ dest: `${process.cwd()}/.tmp` })
+  async uploadFile(
+    @MultipartFile('file') file: Express.Multer.File
+  ): Promise<any> {
+    console.log('Uploaded file', file)
+
+    return true
   }
 
-  @Post()
+  // PUT requests:
+
+  // @Put()
+  // updatePayload(@BodyParams() payload: PayloadModel): any {
+  //   console.log('Update payload', payload)
+
+  //   return payload
+  // }
+
+  @Put()
+  updateNote(@BodyParams('note') note: NoteModel): any {
+    console.log('Update note', note)
+
+    return note
+  }
+
+  @Put()
   updateNotes(@BodyParams('notes', NoteModel) notes: NoteModel[]): any {
-    console.log('notes', notes)
+    console.log('Update notes', notes)
 
     return notes
   }

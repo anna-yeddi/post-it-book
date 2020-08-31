@@ -55,6 +55,9 @@ export class NoteModel {
     new Date().toTimeString().split(' ')[0]
 
   @Required()
+  author!: string
+
+  @Required()
   @Title('Note itself')
   @Default('')
   body: string = ''
@@ -62,7 +65,7 @@ export class NoteModel {
   @Title('Attachments (if any)')
   @Example(['image.jpeg', 'url to YouTube video', 'book.pdf'])
   @Default([])
-  attachments: Array<fil>
+  attachments!: Array<Express.Multer.File | string>
 
   @Description('Users that have access to this note')
   @Default([])

@@ -2,6 +2,8 @@ import { Configuration, Inject, PlatformApplication } from '@tsed/common'
 import { GlobalAcceptMimesMiddleware } from '@tsed/platform-express'
 import { NotesCtrl } from './controllers/NotesCtrl'
 import '@tsed/ajv'
+import '@tsed/multipartfiles'
+import '@tsed/swagger'
 const Path = require('path')
 const bodyParser = require('body-parser')
 const compress = require('compression')
@@ -22,7 +24,23 @@ const rootDir = Path.resolve(__dirname)
   },
 
   // Custom configuration to be added here:
-  acceptMimes: ['application/json'],
+  acceptMimes: ['application/json', 'multipart/form-data'],
+  logger: {
+    debug: false,
+    logRequest: true,
+    requestFields: [
+      'reqId',
+      'method',
+      'url',
+      'headers',
+      'query',
+      'params',
+      'duration',
+    ],
+  },
+  swagger: {
+    path: '/api-docs',
+  },
 
   // Connection
   // Ports are referenced in nodemon config too
@@ -39,6 +57,8 @@ const rootDir = Path.resolve(__dirname)
       connectionOptions: {},
     },
   ],
+  // Uploading, storing, and accessing files:
+  multer: [],
 })
 export class Server {
   @Inject()
